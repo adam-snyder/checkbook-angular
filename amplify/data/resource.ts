@@ -13,9 +13,6 @@ const schema = a.schema({
       payment: a.belongsTo('Payment', 'paymentId'),
     })
     .identifier(['recordId'])
-    .secondaryIndexes((index) => [
-      index('recordId').sortKeys(['postDate']),
-    ])
     .authorization((allow) => [allow.publicApiKey()]),
   Payment: a
     .model({
@@ -31,9 +28,6 @@ const schema = a.schema({
       records: a.hasMany('Record', 'paymentId'),
     })
     .identifier(['paymentId'])
-    .secondaryIndexes((index) => [
-      index('paymentId').sortKeys(['nextDate']),
-    ])
     .authorization((allow) => [allow.publicApiKey()]),
 });
 
