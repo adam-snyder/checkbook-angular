@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { generateClient } from 'aws-amplify/api';
@@ -16,28 +15,21 @@ const client = generateClient<Schema>();
   styleUrl: './records.component.css'
 })
 export class RecordsComponent implements OnInit {
-  records: any[] = [];
+  payments: any[] = [];
 
   constructor(
-    private destroyRef: DestroyRef
   ) {
   }
 
   ngOnInit() {
-    this.listRecords();
+    this.listPayments();
   }
 
-  private listRecords() {
-    try {
-      client.models.Record.observeQuery()
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe({
-          next: ( { items } ) => {
-            this.records = items;
-          }
-        })
-    } catch (e) {
-      console.error('failed to fetch records', e);
-    }
+  private listPayments() {
+    client.models.Payment.list()
+      .then(({ data, errors }) => {
+        console.log(data, errors)
+        this.payments = data;
+      });
   }
 }
