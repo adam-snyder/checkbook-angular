@@ -6,6 +6,7 @@
         <li
             *ngFor="let todo of todos;" (click)="deleteTodo(todo.id)">
             {{ todo.content }}
+            <input type="checkbox" [(ngModel)]="todo.isDone" (click)="completeTodo($event, todo.id)">
         </li>
     </ul>
     <div>

@@ -10,6 +10,15 @@ const schema = a.schema({
   Todo: a
     .model({
       content: a.string(),
+      isDone: a.boolean(),
+    })
+    .authorization((allow) => [allow.owner()]),
+  Record: a
+    .model({
+      name: a.string().required(),
+      tags: a.string().array(),
+      postedAt: a.date().required(),
+      amount: a.float().required(),
     })
     .authorization((allow) => [allow.owner()]),
 });

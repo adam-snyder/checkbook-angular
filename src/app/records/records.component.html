@@ -1,0 +1,7 @@
+@for (record of records; track record) {
+  <div class="record">
+    <span>{{record.postedAt | date}}</span>
+    <span>{{record.name}}</span>
+    <span>{{record.amount | number:'1.2'}}</span>
+  </div>
+}
