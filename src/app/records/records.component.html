@@ -1,7 +1,8 @@
-@for (record of records; track record) {
+@for (pmt of payments; track pmt) {
   <div class="record">
-    <span>{{record.postedAt | date}}</span>
-    <span>{{record.name}}</span>
-    <span>{{record.amount | number:'1.2'}}</span>
+    <span>{{pmt.paymentId}}</span>
+    <span>{{pmt.nextDate | date}}</span>
+    <span>{{pmt.name}}</span>
+    <span>{{pmt.amount | number:'1.2'}}</span>
   </div>
 }
