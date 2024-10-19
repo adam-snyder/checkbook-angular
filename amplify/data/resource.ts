@@ -28,6 +28,9 @@ const schema = a.schema({
       records: a.hasMany('Record', 'paymentId'),
     })
     .identifier(['paymentId'])
+    .secondaryIndexes(index => [
+      index('paymentId').sortKeys(['nextDate'])
+    ])
     .authorization((allow) => [allow.publicApiKey()]),
 });
 
