@@ -18,8 +18,10 @@ const schema = a.schema({
     .model({
       paymentId: a.id().required(),
       name: a.string().required(),
+      type: a.enum(['credit', 'debit']),
       category: a.string(),
       amount: a.float().required(),
+      isEstimate: a.boolean(),
       isRepeat: a.boolean(),
       repeatType: a.enum(['year', 'month', 'biweek', 'week']),
       repeatDay: a.integer(),  // day of year/month/week
@@ -28,9 +30,6 @@ const schema = a.schema({
       records: a.hasMany('Record', 'paymentId'),
     })
     .identifier(['paymentId'])
-    .secondaryIndexes(index => [
-      index('paymentId').sortKeys(['nextDate'])
-    ])
     .authorization((allow) => [allow.publicApiKey()]),
 });
 
