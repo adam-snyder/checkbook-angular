@@ -9,7 +9,7 @@ import { RecordsComponent } from './records/records.component';
   selector: 'app-root',
   standalone: true,
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrl: './app.component.scss',
   imports: [RouterOutlet, RecordsComponent, AmplifyAuthenticatorModule],
 })
 export class AppComponent {
@@ -17,5 +17,9 @@ export class AppComponent {
 
   constructor(public authenticator: AuthenticatorService) {
     Amplify.configure(outputs);
+  }
+
+  onReset(): void {
+    // TODO
   }
 }

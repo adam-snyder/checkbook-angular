@@ -1,8 +1,24 @@
-@for (pmt of payments; track pmt) {
-  <div class="record">
-    <span>{{pmt.paymentId}}</span>
-    <span>{{pmt.nextDate | date}}</span>
-    <span>{{pmt.name}}</span>
-    <span>{{pmt.amount | number:'1.2'}}</span>
-  </div>
-}
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Date</th>
+    <th>Name</th>
+    <th class="amount credit">Credit</th>
+    <th class="amount debit">Debit</th>
+    <th class="amount balance">Balance</th>
+  </tr>
+  </thead>
+  <tbody>
+    @for (item of items; track item) {
+      <tr [class.future]="item.isFuture" [class.estimate]="item.isEstimate">
+        <td>{{item.id}}</td>
+        <td>{{item.date | date}}</td>
+        <td>{{item.name}}</td>
+        <td class="amount credit">{{item.credit | amount}}</td>
+        <td class="amount debit">{{item.debit | amount}}</td>
+        <td class="amount balance">{{item.balance | number:'1.2'}}</td>
+      </tr>
+    }
+  </tbody>
+</table>

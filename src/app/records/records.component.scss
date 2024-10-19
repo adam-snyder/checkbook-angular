@@ -1,0 +1,32 @@
+:host {
+  table {
+    margin: 64px;
+    width: calc(100vw - 2*64px);
+
+    thead > tr {
+      & > th {
+        font-weight: normal;
+        text-align: left;
+
+        &.amount {
+          text-align: right;
+        }
+      }
+    }
+
+    tbody > tr {
+      &.estimate {
+        & > td.credit,
+        & > td.debit {
+          font-style: italic;
+        }
+      }
+
+      & > td {
+        &.amount {
+          text-align: right;
+        }
+      }
+    }
+  }
+}
