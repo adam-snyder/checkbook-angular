@@ -9,7 +9,7 @@ const schema = a.schema({
       amount: a.float().required(),
       isRepeat: a.boolean(),
       postDate: a.date().required(),
-      paymentId: a.id().required(),
+      paymentId: a.id(),
       payment: a.belongsTo('Payment', 'paymentId'),
     })
     .identifier(['recordId'])
