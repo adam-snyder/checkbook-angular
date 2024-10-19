@@ -10,6 +10,7 @@ const schema = a.schema({
       amount: a.float().required(),
       isRepeat: a.boolean(),
       isPending: a.boolean().default(true),
+      isArchived: a.boolean().default(false),
       postDate: a.date().required(),
       paymentId: a.id(),
       payment: a.belongsTo('Payment', 'paymentId'),
