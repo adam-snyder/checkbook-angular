@@ -5,9 +5,11 @@ const schema = a.schema({
     .model({
       recordId: a.id().required(),
       name: a.string().required(),
+      type: a.enum(['credit', 'debit']),
       category: a.string(),
       amount: a.float().required(),
       isRepeat: a.boolean(),
+      isPending: a.boolean().default(true),
       postDate: a.date().required(),
       paymentId: a.id(),
       payment: a.belongsTo('Payment', 'paymentId'),
