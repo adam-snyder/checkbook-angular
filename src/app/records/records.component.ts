@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { generateClient } from 'aws-amplify/api';
+import { combineLatest, map, merge, tap } from 'rxjs';
 import type { Schema } from '../../../amplify/data/resource';
 import { AmountPipe } from './amount.pipe';
 
@@ -32,18 +34,26 @@ interface LineItem {
   styleUrl: './records.component.scss'
 })
 export class RecordsComponent implements OnInit {
+
+  destroyRef: DestroyRef;
+
   items: LineItem[] = [];
 
-  ngOnInit() {
-    this.display();
+  constructor() {
+    this.destroyRef = inject(DestroyRef);
   }
 
-  private display() {
-    const payments$ = client.models.Payment.list();
-    const records$ = client.models.Record.list();
-    Promise.all([payments$, records$])
-      .then(([{ data: payments }, { data: records}]) => {
-        this.items = this.process(payments, records);
+  ngOnInit() {
+    const payments$ = client.models.Payment.observeQuery();
+    const records$ = client.models.Record.observeQuery();
+
+    // Listen for changes and update line items
+    combineLatest([payments$, records$])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: ([ { items: payments }, { items: records }]) => {
+          this.items = this.process(payments, records);
+        }
       });
   }
 
