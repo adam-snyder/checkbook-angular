@@ -23,3 +23,19 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 ## License
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
+
+
+```bash
+npx ampx sandbox --profile amplify-policy-989838532044
+```
+
+```bash
+npx ampx generate outputs --stack arn:aws:cloudformation:us-east-1:989838532044:stack/amplify-amplifyangulartemplate-asnyder-sandbox-5e8f97f189/f1169dc0-84ab-11ef-81fd-129dd933dbb7 --profile amplify-policy-989838532044
+```
+
+```bash
+npx ampx generate graphql-client-code --out amplify/functions/dynamodb-trigger/graphql --stack arn:aws:cloudformation:us-east-1:989838532044:stack/amplify-amplifyangulartemplate-asnyder-sandbox-5e8f97f189/f1169dc0-84ab-11ef-81fd-129dd933dbb7 --profile amplify-policy-989838532044
+```
+
+--profile amplify-policy-989838532044
+--stack arn:aws:cloudformation:us-east-1:989838532044:stack/amplify-amplifyangulartemplate-asnyder-sandbox-5e8f97f189/f1169dc0-84ab-11ef-81fd-129dd933dbb7
