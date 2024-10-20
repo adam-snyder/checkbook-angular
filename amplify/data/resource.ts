@@ -1,4 +1,5 @@
 import { a, type ClientSchema, defineData } from '@aws-amplify/backend';
+import { dynamodbTrigger } from '../functions/dynamodb-trigger/resource';
 
 const schema = a.schema({
   Record: a
@@ -35,7 +36,10 @@ const schema = a.schema({
     })
     .identifier(['paymentId'])
     .authorization((allow) => [allow.publicApiKey()]),
-});
+})
+  .authorization((allow) => [
+    allow.resource(dynamodbTrigger),
+  ]);
 
 export type Schema = ClientSchema<typeof schema>;
 
