@@ -24,18 +24,32 @@ See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more inform
 
 This library is licensed under the MIT-0 License. See the LICENSE file.
 
+local AWS profile:
+amplify-policy-989838532044
 
+Terminal env:
+AWS_DEFAULT_PROFILE=amplify-policy-989838532044
+
+localdev stack id:
+arn:aws:cloudformation:us-east-1:989838532044:stack/amplify-amplifyangulartemplate-localdev-sandbox-323ac5b231/707cc340-8eee-11ef-94e9-0affce897f03
+
+main branch stack id:
+arn:aws:cloudformation:us-east-1:989838532044:stack/amplify-d3bwsthjxfu8fk-main-branch-de111cae27/5de04350-843b-11ef-955c-124852ae4e3d
+
+AWS SSO Login
 ```bash
-npx ampx sandbox --profile amplify-policy-989838532044
+aws sso login --profile amplify-policy-989838532044
+```
+
+Local development, deploys back-end resources
+```bash
+npx ampx sandbox --identifier localdev --profile amplify-policy-989838532044
 ```
 
 ```bash
-npx ampx generate outputs --stack arn:aws:cloudformation:us-east-1:989838532044:stack/amplify-amplifyangulartemplate-asnyder-sandbox-5e8f97f189/f1169dc0-84ab-11ef-81fd-129dd933dbb7 --profile amplify-policy-989838532044
+npx ampx generate outputs --stack {STACK_ID} --profile amplify-policy-989838532044
 ```
 
 ```bash
-npx ampx generate graphql-client-code --out amplify/functions/dynamodb-trigger/graphql --stack arn:aws:cloudformation:us-east-1:989838532044:stack/amplify-amplifyangulartemplate-asnyder-sandbox-5e8f97f189/f1169dc0-84ab-11ef-81fd-129dd933dbb7 --profile amplify-policy-989838532044
+npx ampx generate graphql-client-code --out amplify/functions/dynamodb-trigger/graphql --stack {STACK_ID} --profile amplify-policy-989838532044
 ```
-
---profile amplify-policy-989838532044
---stack arn:aws:cloudformation:us-east-1:989838532044:stack/amplify-amplifyangulartemplate-asnyder-sandbox-5e8f97f189/f1169dc0-84ab-11ef-81fd-129dd933dbb7

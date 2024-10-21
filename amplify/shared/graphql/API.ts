@@ -7,16 +7,16 @@ export type Payment = {
   amount: number,
   category?: string | null,
   createdAt: string,
+  futureCopies?: number | null,
+  id: string,
   isEstimate?: boolean | null,
   isRepeat?: boolean | null,
   lastProcessDate?: string | null,
   name: string,
   nextDate?: string | null,
-  paymentId: string,
   records?: ModelRecordConnection | null,
-  repeatDay?: number | null,
-  repeatType?: PaymentRepeatType | null,
-  type?: PaymentType | null,
+  repeatType?: RepeatType | null,
+  type?: TransactType | null,
   updatedAt: string,
 };
 
@@ -31,6 +31,7 @@ export type Record = {
   amount: number,
   category?: string | null,
   createdAt: string,
+  id: string,
   isArchived?: boolean | null,
   isEstimate?: boolean | null,
   isPending?: boolean | null,
@@ -39,28 +40,21 @@ export type Record = {
   payment?: Payment | null,
   paymentId?: string | null,
   postDate: string,
-  recordId: string,
-  type?: RecordType | null,
+  type?: TransactType | null,
   updatedAt: string,
 };
 
-export enum RecordType {
+export enum TransactType {
   credit = "credit",
   debit = "debit",
 }
 
 
-export enum PaymentRepeatType {
+export enum RepeatType {
   biweek = "biweek",
   month = "month",
   week = "week",
   year = "year",
-}
-
-
-export enum PaymentType {
-  credit = "credit",
-  debit = "debit",
 }
 
 
@@ -69,6 +63,7 @@ export type ModelPaymentFilterInput = {
   and?: Array< ModelPaymentFilterInput | null > | null,
   category?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
+  futureCopies?: ModelIntInput | null,
   id?: ModelIDInput | null,
   isEstimate?: ModelBooleanInput | null,
   isRepeat?: ModelBooleanInput | null,
@@ -77,10 +72,8 @@ export type ModelPaymentFilterInput = {
   nextDate?: ModelStringInput | null,
   not?: ModelPaymentFilterInput | null,
   or?: Array< ModelPaymentFilterInput | null > | null,
-  paymentId?: ModelIDInput | null,
-  repeatDay?: ModelIntInput | null,
-  repeatType?: ModelPaymentRepeatTypeInput | null,
-  type?: ModelPaymentTypeInput | null,
+  repeatType?: ModelRepeatTypeInput | null,
+  type?: ModelTransactTypeInput | null,
   updatedAt?: ModelStringInput | null,
 };
 
@@ -136,6 +129,18 @@ export type ModelSizeInput = {
   ne?: number | null,
 };
 
+export type ModelIntInput = {
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  between?: Array< number | null > | null,
+  eq?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ne?: number | null,
+};
+
 export type ModelIDInput = {
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
@@ -159,33 +164,15 @@ export type ModelBooleanInput = {
   ne?: boolean | null,
 };
 
-export type ModelIntInput = {
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  between?: Array< number | null > | null,
-  eq?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ne?: number | null,
+export type ModelRepeatTypeInput = {
+  eq?: RepeatType | null,
+  ne?: RepeatType | null,
 };
 
-export type ModelPaymentRepeatTypeInput = {
-  eq?: PaymentRepeatType | null,
-  ne?: PaymentRepeatType | null,
+export type ModelTransactTypeInput = {
+  eq?: TransactType | null,
+  ne?: TransactType | null,
 };
-
-export type ModelPaymentTypeInput = {
-  eq?: PaymentType | null,
-  ne?: PaymentType | null,
-};
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type ModelPaymentConnection = {
   __typename: "ModelPaymentConnection",
@@ -208,14 +195,8 @@ export type ModelRecordFilterInput = {
   or?: Array< ModelRecordFilterInput | null > | null,
   paymentId?: ModelIDInput | null,
   postDate?: ModelStringInput | null,
-  recordId?: ModelIDInput | null,
-  type?: ModelRecordTypeInput | null,
+  type?: ModelTransactTypeInput | null,
   updatedAt?: ModelStringInput | null,
-};
-
-export type ModelRecordTypeInput = {
-  eq?: RecordType | null,
-  ne?: RecordType | null,
 };
 
 export type ModelPaymentConditionInput = {
@@ -223,6 +204,7 @@ export type ModelPaymentConditionInput = {
   and?: Array< ModelPaymentConditionInput | null > | null,
   category?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
+  futureCopies?: ModelIntInput | null,
   isEstimate?: ModelBooleanInput | null,
   isRepeat?: ModelBooleanInput | null,
   lastProcessDate?: ModelStringInput | null,
@@ -230,24 +212,23 @@ export type ModelPaymentConditionInput = {
   nextDate?: ModelStringInput | null,
   not?: ModelPaymentConditionInput | null,
   or?: Array< ModelPaymentConditionInput | null > | null,
-  repeatDay?: ModelIntInput | null,
-  repeatType?: ModelPaymentRepeatTypeInput | null,
-  type?: ModelPaymentTypeInput | null,
+  repeatType?: ModelRepeatTypeInput | null,
+  type?: ModelTransactTypeInput | null,
   updatedAt?: ModelStringInput | null,
 };
 
 export type CreatePaymentInput = {
   amount: number,
   category?: string | null,
+  futureCopies?: number | null,
+  id?: string | null,
   isEstimate?: boolean | null,
   isRepeat?: boolean | null,
   lastProcessDate?: string | null,
   name: string,
   nextDate?: string | null,
-  paymentId: string,
-  repeatDay?: number | null,
-  repeatType?: PaymentRepeatType | null,
-  type?: PaymentType | null,
+  repeatType?: RepeatType | null,
+  type?: TransactType | null,
 };
 
 export type ModelRecordConditionInput = {
@@ -264,13 +245,14 @@ export type ModelRecordConditionInput = {
   or?: Array< ModelRecordConditionInput | null > | null,
   paymentId?: ModelIDInput | null,
   postDate?: ModelStringInput | null,
-  type?: ModelRecordTypeInput | null,
+  type?: ModelTransactTypeInput | null,
   updatedAt?: ModelStringInput | null,
 };
 
 export type CreateRecordInput = {
   amount: number,
   category?: string | null,
+  id?: string | null,
   isArchived?: boolean | null,
   isEstimate?: boolean | null,
   isPending?: boolean | null,
@@ -278,35 +260,35 @@ export type CreateRecordInput = {
   name: string,
   paymentId?: string | null,
   postDate: string,
-  recordId: string,
-  type?: RecordType | null,
+  type?: TransactType | null,
 };
 
 export type DeletePaymentInput = {
-  paymentId: string,
+  id: string,
 };
 
 export type DeleteRecordInput = {
-  recordId: string,
+  id: string,
 };
 
 export type UpdatePaymentInput = {
   amount?: number | null,
   category?: string | null,
+  futureCopies?: number | null,
+  id: string,
   isEstimate?: boolean | null,
   isRepeat?: boolean | null,
   lastProcessDate?: string | null,
   name?: string | null,
   nextDate?: string | null,
-  paymentId: string,
-  repeatDay?: number | null,
-  repeatType?: PaymentRepeatType | null,
-  type?: PaymentType | null,
+  repeatType?: RepeatType | null,
+  type?: TransactType | null,
 };
 
 export type UpdateRecordInput = {
   amount?: number | null,
   category?: string | null,
+  id: string,
   isArchived?: boolean | null,
   isEstimate?: boolean | null,
   isPending?: boolean | null,
@@ -314,8 +296,7 @@ export type UpdateRecordInput = {
   name?: string | null,
   paymentId?: string | null,
   postDate?: string | null,
-  recordId: string,
-  type?: RecordType | null,
+  type?: TransactType | null,
 };
 
 export type ModelSubscriptionPaymentFilterInput = {
@@ -323,6 +304,7 @@ export type ModelSubscriptionPaymentFilterInput = {
   and?: Array< ModelSubscriptionPaymentFilterInput | null > | null,
   category?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
+  futureCopies?: ModelSubscriptionIntInput | null,
   id?: ModelSubscriptionIDInput | null,
   isEstimate?: ModelSubscriptionBooleanInput | null,
   isRepeat?: ModelSubscriptionBooleanInput | null,
@@ -330,8 +312,6 @@ export type ModelSubscriptionPaymentFilterInput = {
   name?: ModelSubscriptionStringInput | null,
   nextDate?: ModelSubscriptionStringInput | null,
   or?: Array< ModelSubscriptionPaymentFilterInput | null > | null,
-  paymentId?: ModelSubscriptionIDInput | null,
-  repeatDay?: ModelSubscriptionIntInput | null,
   repeatType?: ModelSubscriptionStringInput | null,
   type?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
@@ -364,6 +344,18 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
+export type ModelSubscriptionIntInput = {
+  between?: Array< number | null > | null,
+  eq?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  in?: Array< number | null > | null,
+  le?: number | null,
+  lt?: number | null,
+  ne?: number | null,
+  notIn?: Array< number | null > | null,
+};
+
 export type ModelSubscriptionIDInput = {
   beginsWith?: string | null,
   between?: Array< string | null > | null,
@@ -384,18 +376,6 @@ export type ModelSubscriptionBooleanInput = {
   ne?: boolean | null,
 };
 
-export type ModelSubscriptionIntInput = {
-  between?: Array< number | null > | null,
-  eq?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  in?: Array< number | null > | null,
-  le?: number | null,
-  lt?: number | null,
-  ne?: number | null,
-  notIn?: Array< number | null > | null,
-};
-
 export type ModelSubscriptionRecordFilterInput = {
   amount?: ModelSubscriptionFloatInput | null,
   and?: Array< ModelSubscriptionRecordFilterInput | null > | null,
@@ -410,13 +390,12 @@ export type ModelSubscriptionRecordFilterInput = {
   or?: Array< ModelSubscriptionRecordFilterInput | null > | null,
   paymentId?: ModelSubscriptionIDInput | null,
   postDate?: ModelSubscriptionStringInput | null,
-  recordId?: ModelSubscriptionIDInput | null,
   type?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
 };
 
 export type GetPaymentQueryVariables = {
-  paymentId: string,
+  id: string,
 };
 
 export type GetPaymentQuery = {
@@ -425,25 +404,25 @@ export type GetPaymentQuery = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    futureCopies?: number | null,
+    id: string,
     isEstimate?: boolean | null,
     isRepeat?: boolean | null,
     lastProcessDate?: string | null,
     name: string,
     nextDate?: string | null,
-    paymentId: string,
     records?:  {
       __typename: "ModelRecordConnection",
       nextToken?: string | null,
     } | null,
-    repeatDay?: number | null,
-    repeatType?: PaymentRepeatType | null,
-    type?: PaymentType | null,
+    repeatType?: RepeatType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
 
 export type GetRecordQueryVariables = {
-  recordId: string,
+  id: string,
 };
 
 export type GetRecordQuery = {
@@ -452,6 +431,7 @@ export type GetRecordQuery = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    id: string,
     isArchived?: boolean | null,
     isEstimate?: boolean | null,
     isPending?: boolean | null,
@@ -462,21 +442,20 @@ export type GetRecordQuery = {
       amount: number,
       category?: string | null,
       createdAt: string,
+      futureCopies?: number | null,
+      id: string,
       isEstimate?: boolean | null,
       isRepeat?: boolean | null,
       lastProcessDate?: string | null,
       name: string,
       nextDate?: string | null,
-      paymentId: string,
-      repeatDay?: number | null,
-      repeatType?: PaymentRepeatType | null,
-      type?: PaymentType | null,
+      repeatType?: RepeatType | null,
+      type?: TransactType | null,
       updatedAt: string,
     } | null,
     paymentId?: string | null,
     postDate: string,
-    recordId: string,
-    type?: RecordType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -485,8 +464,6 @@ export type ListPaymentsQueryVariables = {
   filter?: ModelPaymentFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
-  paymentId?: string | null,
-  sortDirection?: ModelSortDirection | null,
 };
 
 export type ListPaymentsQuery = {
@@ -497,15 +474,15 @@ export type ListPaymentsQuery = {
       amount: number,
       category?: string | null,
       createdAt: string,
+      futureCopies?: number | null,
+      id: string,
       isEstimate?: boolean | null,
       isRepeat?: boolean | null,
       lastProcessDate?: string | null,
       name: string,
       nextDate?: string | null,
-      paymentId: string,
-      repeatDay?: number | null,
-      repeatType?: PaymentRepeatType | null,
-      type?: PaymentType | null,
+      repeatType?: RepeatType | null,
+      type?: TransactType | null,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
@@ -516,8 +493,6 @@ export type ListRecordsQueryVariables = {
   filter?: ModelRecordFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
-  recordId?: string | null,
-  sortDirection?: ModelSortDirection | null,
 };
 
 export type ListRecordsQuery = {
@@ -528,6 +503,7 @@ export type ListRecordsQuery = {
       amount: number,
       category?: string | null,
       createdAt: string,
+      id: string,
       isArchived?: boolean | null,
       isEstimate?: boolean | null,
       isPending?: boolean | null,
@@ -535,8 +511,7 @@ export type ListRecordsQuery = {
       name: string,
       paymentId?: string | null,
       postDate: string,
-      recordId: string,
-      type?: RecordType | null,
+      type?: TransactType | null,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
@@ -554,19 +529,19 @@ export type CreatePaymentMutation = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    futureCopies?: number | null,
+    id: string,
     isEstimate?: boolean | null,
     isRepeat?: boolean | null,
     lastProcessDate?: string | null,
     name: string,
     nextDate?: string | null,
-    paymentId: string,
     records?:  {
       __typename: "ModelRecordConnection",
       nextToken?: string | null,
     } | null,
-    repeatDay?: number | null,
-    repeatType?: PaymentRepeatType | null,
-    type?: PaymentType | null,
+    repeatType?: RepeatType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -582,6 +557,7 @@ export type CreateRecordMutation = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    id: string,
     isArchived?: boolean | null,
     isEstimate?: boolean | null,
     isPending?: boolean | null,
@@ -592,21 +568,20 @@ export type CreateRecordMutation = {
       amount: number,
       category?: string | null,
       createdAt: string,
+      futureCopies?: number | null,
+      id: string,
       isEstimate?: boolean | null,
       isRepeat?: boolean | null,
       lastProcessDate?: string | null,
       name: string,
       nextDate?: string | null,
-      paymentId: string,
-      repeatDay?: number | null,
-      repeatType?: PaymentRepeatType | null,
-      type?: PaymentType | null,
+      repeatType?: RepeatType | null,
+      type?: TransactType | null,
       updatedAt: string,
     } | null,
     paymentId?: string | null,
     postDate: string,
-    recordId: string,
-    type?: RecordType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -622,19 +597,19 @@ export type DeletePaymentMutation = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    futureCopies?: number | null,
+    id: string,
     isEstimate?: boolean | null,
     isRepeat?: boolean | null,
     lastProcessDate?: string | null,
     name: string,
     nextDate?: string | null,
-    paymentId: string,
     records?:  {
       __typename: "ModelRecordConnection",
       nextToken?: string | null,
     } | null,
-    repeatDay?: number | null,
-    repeatType?: PaymentRepeatType | null,
-    type?: PaymentType | null,
+    repeatType?: RepeatType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -650,6 +625,7 @@ export type DeleteRecordMutation = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    id: string,
     isArchived?: boolean | null,
     isEstimate?: boolean | null,
     isPending?: boolean | null,
@@ -660,21 +636,20 @@ export type DeleteRecordMutation = {
       amount: number,
       category?: string | null,
       createdAt: string,
+      futureCopies?: number | null,
+      id: string,
       isEstimate?: boolean | null,
       isRepeat?: boolean | null,
       lastProcessDate?: string | null,
       name: string,
       nextDate?: string | null,
-      paymentId: string,
-      repeatDay?: number | null,
-      repeatType?: PaymentRepeatType | null,
-      type?: PaymentType | null,
+      repeatType?: RepeatType | null,
+      type?: TransactType | null,
       updatedAt: string,
     } | null,
     paymentId?: string | null,
     postDate: string,
-    recordId: string,
-    type?: RecordType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -690,19 +665,19 @@ export type UpdatePaymentMutation = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    futureCopies?: number | null,
+    id: string,
     isEstimate?: boolean | null,
     isRepeat?: boolean | null,
     lastProcessDate?: string | null,
     name: string,
     nextDate?: string | null,
-    paymentId: string,
     records?:  {
       __typename: "ModelRecordConnection",
       nextToken?: string | null,
     } | null,
-    repeatDay?: number | null,
-    repeatType?: PaymentRepeatType | null,
-    type?: PaymentType | null,
+    repeatType?: RepeatType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -718,6 +693,7 @@ export type UpdateRecordMutation = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    id: string,
     isArchived?: boolean | null,
     isEstimate?: boolean | null,
     isPending?: boolean | null,
@@ -728,21 +704,20 @@ export type UpdateRecordMutation = {
       amount: number,
       category?: string | null,
       createdAt: string,
+      futureCopies?: number | null,
+      id: string,
       isEstimate?: boolean | null,
       isRepeat?: boolean | null,
       lastProcessDate?: string | null,
       name: string,
       nextDate?: string | null,
-      paymentId: string,
-      repeatDay?: number | null,
-      repeatType?: PaymentRepeatType | null,
-      type?: PaymentType | null,
+      repeatType?: RepeatType | null,
+      type?: TransactType | null,
       updatedAt: string,
     } | null,
     paymentId?: string | null,
     postDate: string,
-    recordId: string,
-    type?: RecordType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -757,19 +732,19 @@ export type OnCreatePaymentSubscription = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    futureCopies?: number | null,
+    id: string,
     isEstimate?: boolean | null,
     isRepeat?: boolean | null,
     lastProcessDate?: string | null,
     name: string,
     nextDate?: string | null,
-    paymentId: string,
     records?:  {
       __typename: "ModelRecordConnection",
       nextToken?: string | null,
     } | null,
-    repeatDay?: number | null,
-    repeatType?: PaymentRepeatType | null,
-    type?: PaymentType | null,
+    repeatType?: RepeatType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -784,6 +759,7 @@ export type OnCreateRecordSubscription = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    id: string,
     isArchived?: boolean | null,
     isEstimate?: boolean | null,
     isPending?: boolean | null,
@@ -794,21 +770,20 @@ export type OnCreateRecordSubscription = {
       amount: number,
       category?: string | null,
       createdAt: string,
+      futureCopies?: number | null,
+      id: string,
       isEstimate?: boolean | null,
       isRepeat?: boolean | null,
       lastProcessDate?: string | null,
       name: string,
       nextDate?: string | null,
-      paymentId: string,
-      repeatDay?: number | null,
-      repeatType?: PaymentRepeatType | null,
-      type?: PaymentType | null,
+      repeatType?: RepeatType | null,
+      type?: TransactType | null,
       updatedAt: string,
     } | null,
     paymentId?: string | null,
     postDate: string,
-    recordId: string,
-    type?: RecordType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -823,19 +798,19 @@ export type OnDeletePaymentSubscription = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    futureCopies?: number | null,
+    id: string,
     isEstimate?: boolean | null,
     isRepeat?: boolean | null,
     lastProcessDate?: string | null,
     name: string,
     nextDate?: string | null,
-    paymentId: string,
     records?:  {
       __typename: "ModelRecordConnection",
       nextToken?: string | null,
     } | null,
-    repeatDay?: number | null,
-    repeatType?: PaymentRepeatType | null,
-    type?: PaymentType | null,
+    repeatType?: RepeatType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -850,6 +825,7 @@ export type OnDeleteRecordSubscription = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    id: string,
     isArchived?: boolean | null,
     isEstimate?: boolean | null,
     isPending?: boolean | null,
@@ -860,21 +836,20 @@ export type OnDeleteRecordSubscription = {
       amount: number,
       category?: string | null,
       createdAt: string,
+      futureCopies?: number | null,
+      id: string,
       isEstimate?: boolean | null,
       isRepeat?: boolean | null,
       lastProcessDate?: string | null,
       name: string,
       nextDate?: string | null,
-      paymentId: string,
-      repeatDay?: number | null,
-      repeatType?: PaymentRepeatType | null,
-      type?: PaymentType | null,
+      repeatType?: RepeatType | null,
+      type?: TransactType | null,
       updatedAt: string,
     } | null,
     paymentId?: string | null,
     postDate: string,
-    recordId: string,
-    type?: RecordType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -889,19 +864,19 @@ export type OnUpdatePaymentSubscription = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    futureCopies?: number | null,
+    id: string,
     isEstimate?: boolean | null,
     isRepeat?: boolean | null,
     lastProcessDate?: string | null,
     name: string,
     nextDate?: string | null,
-    paymentId: string,
     records?:  {
       __typename: "ModelRecordConnection",
       nextToken?: string | null,
     } | null,
-    repeatDay?: number | null,
-    repeatType?: PaymentRepeatType | null,
-    type?: PaymentType | null,
+    repeatType?: RepeatType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };
@@ -916,6 +891,7 @@ export type OnUpdateRecordSubscription = {
     amount: number,
     category?: string | null,
     createdAt: string,
+    id: string,
     isArchived?: boolean | null,
     isEstimate?: boolean | null,
     isPending?: boolean | null,
@@ -926,21 +902,20 @@ export type OnUpdateRecordSubscription = {
       amount: number,
       category?: string | null,
       createdAt: string,
+      futureCopies?: number | null,
+      id: string,
       isEstimate?: boolean | null,
       isRepeat?: boolean | null,
       lastProcessDate?: string | null,
       name: string,
       nextDate?: string | null,
-      paymentId: string,
-      repeatDay?: number | null,
-      repeatType?: PaymentRepeatType | null,
-      type?: PaymentType | null,
+      repeatType?: RepeatType | null,
+      type?: TransactType | null,
       updatedAt: string,
     } | null,
     paymentId?: string | null,
     postDate: string,
-    recordId: string,
-    type?: RecordType | null,
+    type?: TransactType | null,
     updatedAt: string,
   } | null,
 };

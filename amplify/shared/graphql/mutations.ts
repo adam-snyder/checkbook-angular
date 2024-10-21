@@ -16,17 +16,17 @@ export const createPayment = /* GraphQL */ `mutation CreatePayment(
     amount
     category
     createdAt
+    futureCopies
+    id
     isEstimate
     isRepeat
     lastProcessDate
     name
     nextDate
-    paymentId
     records {
       nextToken
       __typename
     }
-    repeatDay
     repeatType
     type
     updatedAt
@@ -45,6 +45,7 @@ export const createRecord = /* GraphQL */ `mutation CreateRecord(
     amount
     category
     createdAt
+    id
     isArchived
     isEstimate
     isPending
@@ -54,13 +55,13 @@ export const createRecord = /* GraphQL */ `mutation CreateRecord(
       amount
       category
       createdAt
+      futureCopies
+      id
       isEstimate
       isRepeat
       lastProcessDate
       name
       nextDate
-      paymentId
-      repeatDay
       repeatType
       type
       updatedAt
@@ -68,7 +69,6 @@ export const createRecord = /* GraphQL */ `mutation CreateRecord(
     }
     paymentId
     postDate
-    recordId
     type
     updatedAt
     __typename
@@ -86,17 +86,17 @@ export const deletePayment = /* GraphQL */ `mutation DeletePayment(
     amount
     category
     createdAt
+    futureCopies
+    id
     isEstimate
     isRepeat
     lastProcessDate
     name
     nextDate
-    paymentId
     records {
       nextToken
       __typename
     }
-    repeatDay
     repeatType
     type
     updatedAt
@@ -115,6 +115,7 @@ export const deleteRecord = /* GraphQL */ `mutation DeleteRecord(
     amount
     category
     createdAt
+    id
     isArchived
     isEstimate
     isPending
@@ -124,13 +125,13 @@ export const deleteRecord = /* GraphQL */ `mutation DeleteRecord(
       amount
       category
       createdAt
+      futureCopies
+      id
       isEstimate
       isRepeat
       lastProcessDate
       name
       nextDate
-      paymentId
-      repeatDay
       repeatType
       type
       updatedAt
@@ -138,7 +139,6 @@ export const deleteRecord = /* GraphQL */ `mutation DeleteRecord(
     }
     paymentId
     postDate
-    recordId
     type
     updatedAt
     __typename
@@ -156,17 +156,17 @@ export const updatePayment = /* GraphQL */ `mutation UpdatePayment(
     amount
     category
     createdAt
+    futureCopies
+    id
     isEstimate
     isRepeat
     lastProcessDate
     name
     nextDate
-    paymentId
     records {
       nextToken
       __typename
     }
-    repeatDay
     repeatType
     type
     updatedAt
@@ -185,6 +185,7 @@ export const updateRecord = /* GraphQL */ `mutation UpdateRecord(
     amount
     category
     createdAt
+    id
     isArchived
     isEstimate
     isPending
@@ -194,13 +195,13 @@ export const updateRecord = /* GraphQL */ `mutation UpdateRecord(
       amount
       category
       createdAt
+      futureCopies
+      id
       isEstimate
       isRepeat
       lastProcessDate
       name
       nextDate
-      paymentId
-      repeatDay
       repeatType
       type
       updatedAt
@@ -208,7 +209,6 @@ export const updateRecord = /* GraphQL */ `mutation UpdateRecord(
     }
     paymentId
     postDate
-    recordId
     type
     updatedAt
     __typename

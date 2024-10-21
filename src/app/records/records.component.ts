@@ -4,7 +4,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { generateClient } from 'aws-amplify/api';
-import { combineLatest, map, merge, tap } from 'rxjs';
+import moment from 'moment';
+import { combineLatest } from 'rxjs';
 import type { Schema } from '../../../amplify/data/resource';
 import { AmountPipe } from './amount.pipe';
 
@@ -13,12 +14,15 @@ const client = generateClient<Schema>();
 interface LineItem {
   id: string;
   name: string;
-  date: Date;
+  date: moment.Moment;
+  isRepeat: boolean;
   credit: number;
   debit: number;
   balance: number;
   isEstimate: boolean;
   isFuture: boolean;
+  futureCopies?: number;
+  isPending?: boolean;
 }
 
 @Component({
@@ -60,10 +64,11 @@ export class RecordsComponent implements OnInit {
   process(payments: any[], records: any[]): LineItem[] {
 
     const sortItems = (a: any, b: any): number => {
-      return a.date - b.date;
+      return a.date.diff(b.date);
     };
 
     const items = [
+      // TODO expand payments to N futureCopies
       ...payments.map(p => this.formatPayment(p)),
       ...records.map(r => this.formatRecord(r)),
     ];
@@ -83,44 +88,57 @@ export class RecordsComponent implements OnInit {
 
   private formatPayment(payment: any): LineItem {
     const {
-      paymentId: id,
+      id,
       name,
       type,
       nextDate: date,
+      isRepeat,
       amount,
+      futureCopies,
       isEstimate,
     } = payment;
 
     return {
       id,
       name,
-      date: new Date(date),
+      date: this.parseDate(date),
+      isRepeat,
       credit: type === 'credit' ? amount : 0,
       debit: type === 'debit' ? amount : 0,
       balance: 0,
       isFuture: true,
+      futureCopies,
       isEstimate,
     };
   }
 
   private formatRecord(record: any): LineItem {
     const {
-      recordId: id,
+      id,
       name,
       type,
       postDate: date,
+      isRepeat,
       amount,
+      isEstimate,
+      isPending,
     } = record;
 
     return {
       id,
       name,
-      date: new Date(date),
+      date: this.parseDate(date),
+      isRepeat,
       credit: type === 'credit' ? amount : 0,
       debit: type === 'debit' ? amount : 0,
       balance: 0,
       isFuture: false,
-      isEstimate: false,
+      isEstimate,
+      isPending,
     };
+  }
+
+  private parseDate(value: string): moment.Moment {
+    return moment.utc(value);
   }
 }

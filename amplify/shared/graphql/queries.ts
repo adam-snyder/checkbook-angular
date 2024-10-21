@@ -8,22 +8,22 @@ type GeneratedQuery<InputType, OutputType> = string & {
   __generatedQueryOutput: OutputType;
 };
 
-export const getPayment = /* GraphQL */ `query GetPayment($paymentId: ID!) {
-  getPayment(paymentId: $paymentId) {
+export const getPayment = /* GraphQL */ `query GetPayment($id: ID!) {
+  getPayment(id: $id) {
     amount
     category
     createdAt
+    futureCopies
+    id
     isEstimate
     isRepeat
     lastProcessDate
     name
     nextDate
-    paymentId
     records {
       nextToken
       __typename
     }
-    repeatDay
     repeatType
     type
     updatedAt
@@ -34,11 +34,12 @@ export const getPayment = /* GraphQL */ `query GetPayment($paymentId: ID!) {
   APITypes.GetPaymentQueryVariables,
   APITypes.GetPaymentQuery
 >;
-export const getRecord = /* GraphQL */ `query GetRecord($recordId: ID!) {
-  getRecord(recordId: $recordId) {
+export const getRecord = /* GraphQL */ `query GetRecord($id: ID!) {
+  getRecord(id: $id) {
     amount
     category
     createdAt
+    id
     isArchived
     isEstimate
     isPending
@@ -48,13 +49,13 @@ export const getRecord = /* GraphQL */ `query GetRecord($recordId: ID!) {
       amount
       category
       createdAt
+      futureCopies
+      id
       isEstimate
       isRepeat
       lastProcessDate
       name
       nextDate
-      paymentId
-      repeatDay
       repeatType
       type
       updatedAt
@@ -62,7 +63,6 @@ export const getRecord = /* GraphQL */ `query GetRecord($recordId: ID!) {
     }
     paymentId
     postDate
-    recordId
     type
     updatedAt
     __typename
@@ -73,27 +73,19 @@ export const listPayments = /* GraphQL */ `query ListPayments(
   $filter: ModelPaymentFilterInput
   $limit: Int
   $nextToken: String
-  $paymentId: ID
-  $sortDirection: ModelSortDirection
 ) {
-  listPayments(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    paymentId: $paymentId
-    sortDirection: $sortDirection
-  ) {
+  listPayments(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       amount
       category
       createdAt
+      futureCopies
+      id
       isEstimate
       isRepeat
       lastProcessDate
       name
       nextDate
-      paymentId
-      repeatDay
       repeatType
       type
       updatedAt
@@ -111,20 +103,13 @@ export const listRecords = /* GraphQL */ `query ListRecords(
   $filter: ModelRecordFilterInput
   $limit: Int
   $nextToken: String
-  $recordId: ID
-  $sortDirection: ModelSortDirection
 ) {
-  listRecords(
-    filter: $filter
-    limit: $limit
-    nextToken: $nextToken
-    recordId: $recordId
-    sortDirection: $sortDirection
-  ) {
+  listRecords(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       amount
       category
       createdAt
+      id
       isArchived
       isEstimate
       isPending
@@ -132,7 +117,6 @@ export const listRecords = /* GraphQL */ `query ListRecords(
       name
       paymentId
       postDate
-      recordId
       type
       updatedAt
       __typename

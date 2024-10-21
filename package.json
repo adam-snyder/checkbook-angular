@@ -20,6 +20,7 @@
     "@angular/router": "^17.3.0",
     "@aws-amplify/ui-angular": "^5.0.27",
     "aws-amplify": "^6.4.0",
+    "moment": "^2.30.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
@@ -33,6 +34,7 @@
     "@aws-lambda-powertools/logger": "^2.9.0",
     "@types/aws-lambda": "^8.10.145",
     "@types/jasmine": "~5.1.0",
+    "@types/moment": "^2.13.0",
     "aws-cdk": "^2.137.0",
     "aws-cdk-lib": "^2.137.0",
     "constructs": "^10.3.0",

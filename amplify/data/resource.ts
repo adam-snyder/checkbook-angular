@@ -1,12 +1,18 @@
 import { a, type ClientSchema, defineData } from '@aws-amplify/backend';
+import { dailyPayments } from '../functions/daily-payments/resource';
 import { dynamodbTrigger } from '../functions/dynamodb-trigger/resource';
 
+
 const schema = a.schema({
+  // Enums
+  RepeatType: a.enum(['year', 'month', 'biweek', 'week']),
+  TransactType: a.enum(['credit', 'debit']),
+
+  // Models
   Record: a
     .model({
-      recordId: a.id().required(),
       name: a.string().required(),
-      type: a.enum(['credit', 'debit']),
+      type: a.ref('TransactType'),
       category: a.string(),
       amount: a.float().required(),
       isEstimate: a.boolean().default(false),
@@ -17,28 +23,27 @@ const schema = a.schema({
       paymentId: a.id(),
       payment: a.belongsTo('Payment', 'paymentId'),
     })
-    .identifier(['recordId'])
     .authorization((allow) => [allow.publicApiKey()]),
   Payment: a
     .model({
-      paymentId: a.id().required(),
       name: a.string().required(),
-      type: a.enum(['credit', 'debit']),
+      type: a.ref('TransactType'),
       category: a.string(),
       amount: a.float().required(),
       isEstimate: a.boolean().default(false),
       isRepeat: a.boolean().default(false),
-      repeatType: a.enum(['year', 'month', 'biweek', 'week']),
-      repeatDay: a.integer(),  // day of year/month/week
-      lastProcessDate: a.datetime().default('1970-01-01T00:00:00.000Z'),
+      repeatType: a.ref('RepeatType'),
+      futureCopies: a.integer().default(1),
       nextDate: a.date(),
+      lastProcessDate: a.datetime().default('1970-01-01T00:00:00.000Z'),
       records: a.hasMany('Record', 'paymentId'),
     })
-    .identifier(['paymentId'])
     .authorization((allow) => [allow.publicApiKey()]),
 })
+  // Provide access to data model for back-end functions
   .authorization((allow) => [
     allow.resource(dynamodbTrigger),
+    allow.resource(dailyPayments),
   ]);
 
 export type Schema = ClientSchema<typeof schema>;

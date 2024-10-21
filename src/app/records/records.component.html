@@ -1,8 +1,10 @@
 <table>
   <thead>
   <tr>
-    <th>ID</th>
+    <th></th>
+    <th>Num</th>
     <th>Date</th>
+    <th>Repeat</th>
     <th>Name</th>
     <th class="amount credit">Credit</th>
     <th class="amount debit">Debit</th>
@@ -10,10 +12,12 @@
   </tr>
   </thead>
   <tbody>
-    @for (item of items; track item) {
+    @for (item of items; track item; let index = $index;) {
       <tr [class.future]="item.isFuture" [class.estimate]="item.isEstimate">
-        <td>{{item.id}}</td>
-        <td>{{item.date | date}}</td>
+        <td>{{item.isPending ? '*' : ''}}</td>
+        <td>{{index+1}}</td>
+        <td>{{item.date.toDate() | date:'shortDate':'Z'}}</td>
+        <td>{{item.futureCopies}}</td>
         <td>{{item.name}}</td>
         <td class="amount credit">{{item.credit | amount}}</td>
         <td class="amount debit">{{item.debit | amount}}</td>

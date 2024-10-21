@@ -13,17 +13,17 @@ export const onCreatePayment = /* GraphQL */ `subscription OnCreatePayment($filt
     amount
     category
     createdAt
+    futureCopies
+    id
     isEstimate
     isRepeat
     lastProcessDate
     name
     nextDate
-    paymentId
     records {
       nextToken
       __typename
     }
-    repeatDay
     repeatType
     type
     updatedAt
@@ -39,6 +39,7 @@ export const onCreateRecord = /* GraphQL */ `subscription OnCreateRecord($filter
     amount
     category
     createdAt
+    id
     isArchived
     isEstimate
     isPending
@@ -48,13 +49,13 @@ export const onCreateRecord = /* GraphQL */ `subscription OnCreateRecord($filter
       amount
       category
       createdAt
+      futureCopies
+      id
       isEstimate
       isRepeat
       lastProcessDate
       name
       nextDate
-      paymentId
-      repeatDay
       repeatType
       type
       updatedAt
@@ -62,7 +63,6 @@ export const onCreateRecord = /* GraphQL */ `subscription OnCreateRecord($filter
     }
     paymentId
     postDate
-    recordId
     type
     updatedAt
     __typename
@@ -77,17 +77,17 @@ export const onDeletePayment = /* GraphQL */ `subscription OnDeletePayment($filt
     amount
     category
     createdAt
+    futureCopies
+    id
     isEstimate
     isRepeat
     lastProcessDate
     name
     nextDate
-    paymentId
     records {
       nextToken
       __typename
     }
-    repeatDay
     repeatType
     type
     updatedAt
@@ -103,6 +103,7 @@ export const onDeleteRecord = /* GraphQL */ `subscription OnDeleteRecord($filter
     amount
     category
     createdAt
+    id
     isArchived
     isEstimate
     isPending
@@ -112,13 +113,13 @@ export const onDeleteRecord = /* GraphQL */ `subscription OnDeleteRecord($filter
       amount
       category
       createdAt
+      futureCopies
+      id
       isEstimate
       isRepeat
       lastProcessDate
       name
       nextDate
-      paymentId
-      repeatDay
       repeatType
       type
       updatedAt
@@ -126,7 +127,6 @@ export const onDeleteRecord = /* GraphQL */ `subscription OnDeleteRecord($filter
     }
     paymentId
     postDate
-    recordId
     type
     updatedAt
     __typename
@@ -141,17 +141,17 @@ export const onUpdatePayment = /* GraphQL */ `subscription OnUpdatePayment($filt
     amount
     category
     createdAt
+    futureCopies
+    id
     isEstimate
     isRepeat
     lastProcessDate
     name
     nextDate
-    paymentId
     records {
       nextToken
       __typename
     }
-    repeatDay
     repeatType
     type
     updatedAt
@@ -167,6 +167,7 @@ export const onUpdateRecord = /* GraphQL */ `subscription OnUpdateRecord($filter
     amount
     category
     createdAt
+    id
     isArchived
     isEstimate
     isPending
@@ -176,13 +177,13 @@ export const onUpdateRecord = /* GraphQL */ `subscription OnUpdateRecord($filter
       amount
       category
       createdAt
+      futureCopies
+      id
       isEstimate
       isRepeat
       lastProcessDate
       name
       nextDate
-      paymentId
-      repeatDay
       repeatType
       type
       updatedAt
@@ -190,7 +191,6 @@ export const onUpdateRecord = /* GraphQL */ `subscription OnUpdateRecord($filter
     }
     paymentId
     postDate
-    recordId
     type
     updatedAt
     __typename
