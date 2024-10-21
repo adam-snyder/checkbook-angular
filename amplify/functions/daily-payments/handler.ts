@@ -39,7 +39,7 @@ export const handler: EventBridgeHandler<"Scheduled Event", null, void> = async 
 
       return Promise.all([
         ...payments.map(payment => {
-          return processPayment(payment, today)
+          return processPayment(payment)
             .then(() => {
               console.log('Successfully processed payment:', payment.id);
             })

@@ -6,6 +6,7 @@
     <th>Date</th>
     <th>Repeat</th>
     <th>Name</th>
+    <th>Category</th>
     <th class="amount credit">Credit</th>
     <th class="amount debit">Debit</th>
     <th class="amount balance">Balance</th>
@@ -19,6 +20,7 @@
         <td>{{item.date.toDate() | date:'shortDate':'Z'}}</td>
         <td>{{item.futureCopies}}</td>
         <td>{{item.name}}</td>
+        <td>{{item.category}}</td>
         <td class="amount credit">{{item.credit | amount}}</td>
         <td class="amount debit">{{item.debit | amount}}</td>
         <td class="amount balance">{{item.balance | number:'1.2'}}</td>

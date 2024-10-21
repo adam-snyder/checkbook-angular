@@ -6,11 +6,8 @@ import { getPayment } from './graphql/queries';
 
 const client = bootstrapClient(env);
 
-// Assumes:
-// 1. nextDate is set
-// 2. repeatType is set
-
-export const processPayment = async (paymentOrId: Payment | string, date: string): Promise<Record | null> => {
+// Note: Assumes nextDate and repeatType are non-null
+export const processPayment = async (paymentOrId: Payment | string): Promise<Record | null> => {
 
   let paymentId: string;
   let getPayment$: () => Promise<any>;
@@ -25,7 +22,7 @@ export const processPayment = async (paymentOrId: Payment | string, date: string
         variables: { id: paymentId }
       }).then((result) => {
         if (result.errors) {
-          console.error('Failed to fetch payment');
+          console.error('Failed to fetch payment', result.errors);
           return null;
         }
         return result.data.getPayment;
@@ -49,7 +46,7 @@ export const processPayment = async (paymentOrId: Payment | string, date: string
       isEstimate: payment.isEstimate,
       // Start pending
       isPending: true,
-      postDate: payment.nextDate || date,
+      postDate: payment.nextDate,
     };
 
     console.log('Creating record:', attrs);
@@ -61,7 +58,7 @@ export const processPayment = async (paymentOrId: Payment | string, date: string
       }
     }).then((result) => {
       if (result.errors) {
-        console.error('Failed to create record');
+        console.error('Failed to create record', result.errors);
         return null;
       }
       return result.data.createRecord;
@@ -107,7 +104,7 @@ export const processPayment = async (paymentOrId: Payment | string, date: string
       }
     }).then((result) => {
       if (result.errors) {
-        console.error('Failed to update payment');
+        console.error('Failed to update payment', result.errors);
         return null;
       }
       return result.data.updatePayment;

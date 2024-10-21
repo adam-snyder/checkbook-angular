@@ -44,6 +44,7 @@ export const createRecord = /* GraphQL */ `mutation CreateRecord(
   createRecord(condition: $condition, input: $input) {
     amount
     category
+    comment
     createdAt
     id
     isArchived
@@ -114,6 +115,7 @@ export const deleteRecord = /* GraphQL */ `mutation DeleteRecord(
   deleteRecord(condition: $condition, input: $input) {
     amount
     category
+    comment
     createdAt
     id
     isArchived
@@ -184,6 +186,7 @@ export const updateRecord = /* GraphQL */ `mutation UpdateRecord(
   updateRecord(condition: $condition, input: $input) {
     amount
     category
+    comment
     createdAt
     id
     isArchived

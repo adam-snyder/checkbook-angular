@@ -3,9 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { AmplifyAuthenticatorModule, AuthenticatorService } from '@aws-amplify/ui-angular';
 import { Amplify } from 'aws-amplify';
 import { generateClient } from 'aws-amplify/api';
-import type { Schema } from '../../amplify/data/resource';
+import type { Payment, Record, Schema } from '../../amplify/data/resource';
 import outputs from '../../amplify_outputs.json';
 import { RecordsComponent } from './records/records.component';
+
+type Attributes = { [key: string]: any };
 
 const client = generateClient<Schema>();
 
@@ -26,7 +28,7 @@ AT&T,debit,utilities,55.38,false,true,month,1,,2024-10-28
 AES,debit,utilities,47,true,true,month,1,,2024-11-06
 Centerpoint,debit,utilities,170,true,true,month,1,,2024-11-07
 Chase Credit Card,debit,credit,0,true,true,month,1,,2024-11-01
-Other Paycheck,credit,income.paycheck,650,true,true,month,1,,2024-10-30
+Other Paycheck,credit,income,650,true,true,month,1,,2024-10-30
 College 529,debit,investment,150,false,true,month,1,,2024-11-03
 Thrivent,debit,insurance,30,false,true,month,1,,2024-11-03
 Highlander,debit,auto,469,false,true,month,1,,2024-11-15
@@ -79,7 +81,7 @@ export class AppComponent {
           // Create payments
           ...pmtItems
             .map(item => {
-              client.models.Payment.create(item as any)
+              client.models.Payment.create(item as Payment)
                 .then(({ data, errors }) => {
                   if (errors) {
                     console.error(errors);
@@ -93,7 +95,7 @@ export class AppComponent {
           // Create records
           ...recItems
             .map(item => {
-              client.models.Record.create(item as any)
+              client.models.Record.create(item as Record)
                 .then(({ data, errors }) => {
                   if (errors) {
                     console.error(errors);
@@ -108,17 +110,17 @@ export class AppComponent {
   }
 
 
-  private parseData(value: string): Record<string, any>[] {
+  private parseData(value: string): Attributes[] {
     const lines = value.split('\n')
       .filter(l => l.trim().length);
 
     const cols = lines[0].split(',');
     lines.shift();  // remove header row
 
-    const items: Record<string, any>[] = [];
+    const items: Attributes[] = [];
     lines.forEach(line => {
       const fields = line.split(',');
-      const item: Record<string, any> = {};
+      const item: Attributes = {};
       cols.forEach((c, i) => {
         let value: any = fields[i];
 

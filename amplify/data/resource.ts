@@ -12,7 +12,8 @@ const schema = a.schema({
   Record: a
     .model({
       name: a.string().required(),
-      type: a.ref('TransactType'),
+      comment: a.string(),
+      type: a.ref('TransactType').required(),
       category: a.string(),
       amount: a.float().required(),
       isEstimate: a.boolean().default(false),
@@ -27,15 +28,15 @@ const schema = a.schema({
   Payment: a
     .model({
       name: a.string().required(),
-      type: a.ref('TransactType'),
+      type: a.ref('TransactType').required(),
       category: a.string(),
       amount: a.float().required(),
       isEstimate: a.boolean().default(false),
       isRepeat: a.boolean().default(false),
       repeatType: a.ref('RepeatType'),
       futureCopies: a.integer().default(1),
-      nextDate: a.date(),
-      lastProcessDate: a.datetime().default('1970-01-01T00:00:00.000Z'),
+      nextDate: a.date().required(),
+      lastProcessDate: a.datetime().default('1970-01-01T00:00:00.000Z').required(),
       records: a.hasMany('Record', 'paymentId'),
     })
     .authorization((allow) => [allow.publicApiKey()]),
@@ -47,6 +48,8 @@ const schema = a.schema({
   ]);
 
 export type Schema = ClientSchema<typeof schema>;
+export type Payment = Schema['Payment']['type'];
+export type Record = Schema['Record']['type'];
 
 export const data = defineData({
   schema,

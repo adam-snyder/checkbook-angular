@@ -6,7 +6,7 @@ import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 import { generateClient } from 'aws-amplify/api';
 import moment from 'moment';
 import { combineLatest } from 'rxjs';
-import type { Schema } from '../../../amplify/data/resource';
+import type { Payment, Record, Schema } from '../../../amplify/data/resource';
 import { AmountPipe } from './amount.pipe';
 
 const client = generateClient<Schema>();
@@ -21,6 +21,7 @@ interface LineItem {
   balance: number;
   isEstimate: boolean;
   isFuture: boolean;
+  category?: string | null;
   futureCopies?: number;
   isPending?: boolean;
 }
@@ -61,9 +62,9 @@ export class RecordsComponent implements OnInit {
       });
   }
 
-  process(payments: any[], records: any[]): LineItem[] {
+  process(payments: Payment[], records: Record[]): LineItem[] {
 
-    const sortItems = (a: any, b: any): number => {
+    const sortItems = (a: LineItem, b: LineItem): number => {
       return a.date.diff(b.date);
     };
 
@@ -86,10 +87,11 @@ export class RecordsComponent implements OnInit {
     return items;
   }
 
-  private formatPayment(payment: any): LineItem {
+  private formatPayment(payment: Payment): LineItem {
     const {
       id,
       name,
+      category,
       type,
       nextDate: date,
       isRepeat,
@@ -101,21 +103,23 @@ export class RecordsComponent implements OnInit {
     return {
       id,
       name,
+      category,
       date: this.parseDate(date),
-      isRepeat,
+      isRepeat: isRepeat || false,
       credit: type === 'credit' ? amount : 0,
       debit: type === 'debit' ? amount : 0,
       balance: 0,
       isFuture: true,
-      futureCopies,
-      isEstimate,
+      futureCopies: futureCopies || 1,
+      isEstimate: isEstimate || false,
     };
   }
 
-  private formatRecord(record: any): LineItem {
+  private formatRecord(record: Record): LineItem {
     const {
       id,
       name,
+      category,
       type,
       postDate: date,
       isRepeat,
@@ -127,14 +131,15 @@ export class RecordsComponent implements OnInit {
     return {
       id,
       name,
+      category,
       date: this.parseDate(date),
-      isRepeat,
+      isRepeat: isRepeat || false,
       credit: type === 'credit' ? amount : 0,
       debit: type === 'debit' ? amount : 0,
       balance: 0,
       isFuture: false,
-      isEstimate,
-      isPending,
+      isEstimate: isEstimate || false,
+      isPending: isPending || false,
     };
   }
 

@@ -38,6 +38,7 @@ export const onCreateRecord = /* GraphQL */ `subscription OnCreateRecord($filter
   onCreateRecord(filter: $filter) {
     amount
     category
+    comment
     createdAt
     id
     isArchived
@@ -102,6 +103,7 @@ export const onDeleteRecord = /* GraphQL */ `subscription OnDeleteRecord($filter
   onDeleteRecord(filter: $filter) {
     amount
     category
+    comment
     createdAt
     id
     isArchived
@@ -166,6 +168,7 @@ export const onUpdateRecord = /* GraphQL */ `subscription OnUpdateRecord($filter
   onUpdateRecord(filter: $filter) {
     amount
     category
+    comment
     createdAt
     id
     isArchived

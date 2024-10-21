@@ -38,6 +38,7 @@ export const getRecord = /* GraphQL */ `query GetRecord($id: ID!) {
   getRecord(id: $id) {
     amount
     category
+    comment
     createdAt
     id
     isArchived
@@ -108,6 +109,7 @@ export const listRecords = /* GraphQL */ `query ListRecords(
     items {
       amount
       category
+      comment
       createdAt
       id
       isArchived
